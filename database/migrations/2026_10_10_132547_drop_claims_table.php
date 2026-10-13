@@ -1,0 +1,28 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::dropIfExists('claims');
+    }
+
+    public function down(): void
+    {
+        Schema::create('claims', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('found_item_id')->constrained()->cascadeOnDelete();
+            $table->text('claim_reason');
+            $table->text('item_characteristics');
+            $table->string('proof_photo');
+            $table->text('additional_notes')->nullable();
+            $table->enum('status', ['pending', 'approved', 'rejected', 'completed'])->default('pending');
+            $table->timestamps();
+        });
+    }
+};
